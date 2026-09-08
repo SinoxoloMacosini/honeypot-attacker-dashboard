@@ -1,0 +1,4 @@
+paramiko
+pandas
+matplotlib
+flask
