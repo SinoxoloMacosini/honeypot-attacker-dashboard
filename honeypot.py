@@ -6,25 +6,24 @@ credentials without granting real access. For research/education only.
 
 import socket
 import threading
-import datetime
+from logger import log_event, log_auth_attempt
 
 HOST = "0.0.0.0"
 PORT = 2222  # non-privileged port for testing
 
-def log_attempt(ip, data):
-    timestamp = datetime.datetime.utcnow().isoformat()
-    with open("logs.txt", "a") as f:
-        f.write(f"{timestamp} | {ip} | {data}\n")
-
 def handle_client(conn, addr):
-    ip = addr[0]
+    ip, port = addr
+    log_event(ip, port, "connection")
     try:
         conn.send(b"SSH-2.0-OpenSSH_8.2\r\n")
         data = conn.recv(1024)
-        log_attempt(ip, data)
+        # Placeholder: real parsing of SSH auth packets would go here.
+        # For now we log the raw banner exchange as a mock attempt.
+        log_auth_attempt(ip, port, username="unknown", password=str(data))
     except Exception as e:
-        log_attempt(ip, f"error: {e}")
+        log_event(ip, port, "error", {"message": str(e)})
     finally:
+        log_event(ip, port, "disconnect")
         conn.close()
 
 def start_server():
