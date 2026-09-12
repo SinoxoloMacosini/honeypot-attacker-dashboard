@@ -1,6 +1,6 @@
 # SSH Honeypot & Attacker Analytics Dashboard
 
-Cybersecurity project for WeThinkCode — a low-interaction SSH honeypot 
+A low-interaction SSH honeypot 
 that logs connection attempts, credentials tried, and source IPs, 
 feeding a dashboard for behavior analysis.
 
