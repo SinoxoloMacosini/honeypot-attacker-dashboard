@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honeypot Dashboard</title>
+</head>
+<body>
+
+    <h1>Honeypot Analytics Dashboard</h1>
+
+    <section>
+        <h2>Recent Attempts</h2>
+
+        {% if events %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>IP Address</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th>User Agent</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for event in events %}
+                        <tr>
+                            <td>{{ event.get("timestamp", "") }}</td>
+                            <td>{{ event.get("source_ip", "") }}</td>
+                            <td>{{ event.get("details", {}).get("username", "") }}</td>
+                            <td>{{ event.get("details", {}).get("password", "") }}</td>
+                            <td>{{ event.get("details", {}).get("user_agent", "") }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No login attempts recorded yet.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Analytics Charts</h2>
+
+        <div>
+            <h3>Top IP Addresses</h3>
+            <img src="{{ url_for('static', filename=charts.top_ips if charts is mapping else 'top_ips.png') }}"
+                 alt="Top IP addresses">
+        </div>
+
+        <div>
+            <h3>Attempts Over Time</h3>
+            <img src="{{ url_for('static', filename=charts.attempts_over_time if charts is mapping else 'attempts_over_time.png') }}"
+                 alt="Attempts over time">
+        </div>
+
+        <div>
+            <h3>Top User Agents</h3>
+            <img src="{{ url_for('static', filename=charts.top_user_agents if charts is mapping else 'top_user_agents.png') }}"
+                 alt="Top user agents">
+        </div>
+    </section>
+
+</body>
+</html>
